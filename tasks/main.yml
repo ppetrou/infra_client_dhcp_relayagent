@@ -7,13 +7,6 @@
     name: dhcp-relay
     state: present
 
-# Copy the /lib/systemd/system/dhcrelay.service file to the /etc/systemd/system/ directory
-- name: copy the /lib/systemd/system/dhcrelay.service file to the /etc/systemd/system/ directory
-  ansible.builtin.copy:
-    src: /usr/lib/systemd/system/dhcpd.service
-    dest: /etc/systemd/system/
-    remote_src: yes
-
 # configure dhcprelay.service
 - name: configure dhcprelay.service
   ansible.builtin.template:
