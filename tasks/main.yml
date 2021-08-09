@@ -1,0 +1,35 @@
+---
+# tasks file for infra_client_dhcp_relayagent
+
+# install dhcp relay agent
+- name: install dhcp relay agent
+  ansible.builtin.dnf:
+    name: dhcp-relay
+    state: present
+
+# Copy the /lib/systemd/system/dhcrelay.service file to the /etc/systemd/system/ directory
+- name: copy the /lib/systemd/system/dhcrelay.service file to the /etc/systemd/system/ directory
+  ansible.builtin.copy:
+    src: /usr/lib/systemd/system/dhcpd.service
+    dest: /etc/systemd/system/
+    remote_src: yes
+
+# configure dhcprelay.service
+- name: configure dhcprelay.service
+  ansible.builtin.template:
+    src: dhcprelay.service.j2
+    dest: /lib/systemd/system/dhcrelay.service
+
+# Reload the systemd manager configuration: 
+- name: reload the systemd manager configuration: 
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+# restart dhcpd.service
+- name : restart dhcprelay.service
+  ansible.builtin.service:
+    name: dhcprelay.service
+    state: restarted
+    enabled: yes
+
+

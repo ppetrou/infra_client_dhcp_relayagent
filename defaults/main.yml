@@ -1,0 +1,6 @@
+---
+# defaults file for infra_client_dhcp_relayagent
+
+dhcp_relay_package: dhcp-relay-12:4.4.2-11.b1.fc34
+subnet_nics: [eth0, eth1]
+dhcp_server_ip: a.b.c.d
