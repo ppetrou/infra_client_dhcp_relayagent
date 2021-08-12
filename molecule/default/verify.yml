@@ -1,0 +1,38 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: dhcpd_relay
+  gather_facts: false
+  tasks:
+  
+  - name: install diffutils and net-tools
+    dnf:
+      name: [diffutils, net-tools]
+      state: present
+
+  - name: Copy valid_dhcrelay.service to test instance for comparison
+    ansible.builtin.copy:
+      src: ../files/valid_dhcrelay.service
+      dest: /tmp/valid_dhcrelay.service
+  
+  - name: validate /etc/systemd/system/dhcrelay.service
+    shell: diff /etc/systemd/system/dhcrelay.service /tmp/valid_dhcrelay.service
+
+  - name: check that dhcrelay is running
+    ansible.builtin.systemd:
+      name: dhcrelay
+      state: started
+    register: dhcrelay_running
+    check_mode: true
+
+  - name: assert dhcrelay is running
+    assert:
+      that:
+        - not dhcrelay_running.changed
+  
+  - name: check if port 67 is listening
+    shell: netstat -unl | grep 67
+    register: netstat_output
+    failed_when: "netstat_output.stdout_lines|length != 1"
+

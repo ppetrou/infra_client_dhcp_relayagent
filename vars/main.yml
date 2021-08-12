@@ -1,2 +1,4 @@
 ---
 # vars file for infra_client_dhcp_relayagent
+
+dhcp_relayagent_package: dhcp-relay-12:4.3.6-44.0.1.el8

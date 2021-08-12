@@ -1,0 +1,15 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+platforms:
+  - name: dhcpd_relay
+    image: centos:latest
+    pre_build_image: true
+    privileged: true
+    command: /sbin/init
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

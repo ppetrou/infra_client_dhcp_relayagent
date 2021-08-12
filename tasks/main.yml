@@ -4,25 +4,23 @@
 # install dhcp relay agent
 - name: install dhcp relay agent
   ansible.builtin.dnf:
-    name: dhcp-relay
+    name: "{{ dhcp_relayagent_package }}"
     state: present
 
-# configure dhcprelay.service
+# configure dhcrelay.service
 - name: configure dhcprelay.service
   ansible.builtin.template:
-    src: dhcprelay.service.j2
-    dest: /lib/systemd/system/dhcrelay.service
+    src: dhcrelay.service.j2
+    dest: /etc/systemd/system/dhcrelay.service
 
 # Reload the systemd manager configuration: 
-- name: reload the systemd manager configuration: 
+- name: reload the systemd manager configuration
   ansible.builtin.systemd:
     daemon_reload: yes
 
-# restart dhcpd.service
-- name : restart dhcprelay.service
+# enable and start dhcrelay.service
+- name: enable and start dhcrelay.service
   ansible.builtin.service:
-    name: dhcprelay.service
-    state: restarted
+    name: dhcrelay.service
+    state: started
     enabled: yes
-
-
